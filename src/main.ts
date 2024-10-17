@@ -1,6 +1,6 @@
 import './style.css';
 import { Feature, Map as OLMap, View } from 'ol';
-import { ScaleLine, defaults as defaultControls } from 'ol/control.js';
+import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { useGeographic } from 'ol/proj.js';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
 import { RotateNorthControl, Button, ToggleButton } from './controls';
@@ -10,6 +10,7 @@ import { PolygonEditor, getRectangleGrid } from './sieve';
 import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
 
 useGeographic();
 
@@ -32,6 +33,24 @@ const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   });
 })
 
+const downloadGridButton = new Button('💾', 'download-grid', () => {
+  const file = new File([
+    new GeoJSON().writeFeatures(cutResult.getFeatures())
+  ], 'geojson-grid.json', {
+    type: 'application/json',
+  })
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(file);
+
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+});
+
 const map = new OLMap({
   target: 'map',
   layers: [
@@ -48,6 +67,7 @@ const map = new OLMap({
   controls: defaultControls().extend([
     togglePolygonEditor,
     convexCoverPolygons,
+    downloadGridButton,
     new RotateNorthControl(),
     new ScaleLine({
       units: 'metric',

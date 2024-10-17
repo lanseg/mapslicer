@@ -1,5 +1,5 @@
 {
-  "name": "ebmap",
+  "name": "mapslicer",
   "version": "0.0.1",
   "description": "Dividing map into individual work areas",
   "type": "module",

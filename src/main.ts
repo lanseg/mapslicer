@@ -7,7 +7,7 @@ import { RotateNorthControl, Button, ToggleButton } from './controls';
 import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
 import { PolygonEditor, getRectangleGrid } from './sieve';
-import { Geometry, Polygon } from 'ol/geom';
+import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 

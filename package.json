@@ -1,0 +1,21 @@
+{
+  "name": "ebmap",
+  "version": "0.0.1",
+  "description": "Dividing map into individual work areas",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "author": "lanseg",
+  "license": "MIT",
+  "dependencies": {
+     "ol": "latest"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.2"
+  }
+}

@@ -6,16 +6,18 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "vitest run"
   },
   "author": "lanseg",
   "license": "MIT",
   "dependencies": {
-     "ol": "latest"
+    "ol": "latest"
   },
   "devDependencies": {
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
-    "vite": "^5.4.2"
+    "vite": "^5.4.2",
+    "vitest": "^2.1.3"
   }
 }

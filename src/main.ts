@@ -26,9 +26,13 @@ const togglePolygonEditor = new ToggleButton(
 
 const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   cutResult.clear();
+  let area = 0;
   select.getFeatures().forEach((f: Feature<Geometry>) => {
     const ext = f.getGeometry()?.getExtent()!;
-    const grid = getRectangleGrid([ext[0], ext[1]], [ext[2], ext[3]], 50, map.getView().getProjection());
+    const grid = getRectangleGrid(
+      ext, 50, map.getView().getProjection(), {
+        name: `Area ${area++}`
+      });
     cutResult.addFeatures(grid.filter((rect) => f.getGeometry()?.intersectsExtent(rect.getGeometry()?.getExtent()!)));
   });
 })

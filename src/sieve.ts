@@ -4,6 +4,7 @@ import { Feature } from 'ol';
 import { Vector as VectorSource } from 'ol/source';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
+import { Extent } from 'ol/extent';
 
 export class PolygonEditor extends VectorSource {
 
@@ -30,13 +31,13 @@ function uuid4(): string {
     });
 }
 
-export function getRectangleGrid(topLeft: [number, number], bottomRight: [number, number], side: number, proj: Projection) {
+export function getRectangleGrid(extent: Extent, side: number, proj: Projection, properties: { [name: string]: any} = {}) {
   const result = [];
-  const topLeftXY = fromLonLat(topLeft);
-  const bottomRightXY = fromLonLat(bottomRight);
+  const topLeftXY = fromLonLat([extent[0], extent[1]]);
+  const bottomRightXY = fromLonLat([extent[2], extent[3]]);
   for (let x = topLeftXY[0]; x < bottomRightXY[0]; x += side) {
     for (let y = topLeftXY[1]; y < bottomRightXY[1]; y += side) {
-      result.push(new Feature({
+      const f = new Feature({
         geometry: new Polygon([[
           toLonLat([x, y], proj),
           toLonLat([x + side, y], proj),
@@ -44,8 +45,10 @@ export function getRectangleGrid(topLeft: [number, number], bottomRight: [number
           toLonLat([x, y + side], proj),
           toLonLat([x, y], proj),
         ]])
-      }));
-      result[result.length - 1].setId(uuid4());
+      });
+      f.setId(uuid4());
+      f.setProperties(properties);
+      result.push(f);
     }
   }
   return result;

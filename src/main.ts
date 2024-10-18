@@ -13,7 +13,6 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 
 useGeographic();
-
 const select = new Select({});
 const cutAreas = new PolygonEditor({});
 const cutResult = new VectorSource({});
@@ -27,7 +26,7 @@ const togglePolygonEditor = new ToggleButton(
 const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   cutResult.clear();
   let area = 0;
-  select.getFeatures().forEach((f: Feature<Geometry>) => {
+  cutAreas.getFeatures().forEach((f: Feature<Geometry>) => {
     const ext = f.getGeometry()?.getExtent()!;
     const grid = getRectangleGrid(
       ext, 50, map.getView().getProjection(), {

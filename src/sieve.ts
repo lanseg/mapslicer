@@ -1,10 +1,42 @@
-import { Polygon } from 'ol/geom';
+import { Geometry, Polygon } from 'ol/geom';
 import { Projection, toLonLat, fromLonLat } from 'ol/proj.js';
-import { Feature } from 'ol';
+import { Feature, Map as OLMap } from 'ol';
 import { Vector as VectorSource } from 'ol/source';
-import { Vector as VectorLayer } from 'ol/layer';
+import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
 import { Extent } from 'ol/extent';
+
+export class Mode {
+
+  constructor(
+    public readonly layers: Layer[] = [],
+    public readonly interactions: Interaction[] = [],
+  ) {
+
+  }
+}
+
+export class VectorMarkupMode extends Mode {
+
+  constructor(public readonly source: VectorSource<Feature<Geometry>>) {
+    super(
+      [new VectorLayer({ source })],
+      [
+        new Draw({ source: source, type: "Polygon" }),
+        new Snap({ source: source }),
+        new Modify({ source: source }),
+      ]
+    );
+  }
+
+  enableMode(map: OLMap): void {
+    this.interactions.forEach((i) => map.addInteraction(i))
+  }
+
+  disableMode(map: OLMap): void {
+    this.interactions.forEach((i) => map.removeInteraction(i))
+  }
+}
 
 export class PolygonEditor extends VectorSource {
 
@@ -31,7 +63,7 @@ function uuid4(): string {
     });
 }
 
-export function getRectangleGrid(extent: Extent, side: number, proj: Projection, properties: { [name: string]: any} = {}) {
+export function getRectangleGrid(extent: Extent, side: number, proj: Projection, properties: { [name: string]: any } = {}) {
   const result = [];
   const topLeftXY = fromLonLat([extent[0], extent[1]]);
   const bottomRightXY = fromLonLat([extent[2], extent[3]]);

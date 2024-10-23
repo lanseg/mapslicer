@@ -52,3 +52,7 @@ html, body {
   left: .5em;
   top: 18em;
 }
+
+#fileDialog {
+  display: none;
+}

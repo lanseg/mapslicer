@@ -2,7 +2,7 @@
   "name": "mapslicer",
   "version": "0.0.1",
   "description": "Dividing map into individual work areas",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
@@ -15,6 +15,7 @@
     "ol": "latest"
   },
   "devDependencies": {
+    "cypress": "^13.15.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",
     "vite": "^5.4.2",

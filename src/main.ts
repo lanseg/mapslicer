@@ -3,7 +3,7 @@ import { Feature, Map as OLMap, View } from 'ol';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { useGeographic } from 'ol/proj.js';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
-import { RotateNorthControl, Button, ToggleButton } from './controls';
+import { RotateNorthControl, Button, ToggleButton, KeyboardEventInteraction } from './controls';
 import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
 import { VectorMarkupMode, getRectangleGrid } from './sieve';
@@ -100,6 +100,9 @@ const map = new OLMap({
   ]),
   interactions: defaultInteractions().extend([
     select,
+    new KeyboardEventInteraction({
+      "delete": () => cutResult.removeFeatures(select.getFeatures().getArray())
+    }),
     new Modify({ features: select.getFeatures() }),
     new DragRotateAndZoom(),
   ]),

@@ -1,5 +1,6 @@
-import { Map as OLMap } from 'ol';
+import { MapBrowserEvent, Map as OLMap } from 'ol';
 import { Control } from 'ol/control.js';
+import { Interaction } from 'ol/interaction';
 
 
 export class Button extends Control {
@@ -7,7 +8,7 @@ export class Button extends Control {
     constructor(
         title: string,
         controlClass: string,
-        private readonly onclick: (map: OLMap|null) => void,
+        private readonly onclick: (map: OLMap | null) => void,
         options: { [key: string]: any } = {}
     ) {
         const button = document.createElement('button');
@@ -28,8 +29,8 @@ export class ToggleButton extends Control {
     constructor(
         title: string,
         controlClass: string,
-        private readonly onDown: (map: OLMap|null) => void,
-        private readonly onUp: (map: OLMap|null) => void,
+        private readonly onDown: (map: OLMap | null) => void,
+        private readonly onUp: (map: OLMap | null) => void,
         options: { [key: string]: any } = {}
     ) {
 
@@ -64,5 +65,25 @@ export class RotateNorthControl extends Button {
                 map.getView().setRotation(0);
             }
         }, options);
+    }
+}
+
+export class KeyboardEventInteraction extends Interaction {
+
+    constructor(private readonly actions: { [key: string]: () => void}) {
+        super();
+    }
+
+    handleEvent(mapBrowserEvent: MapBrowserEvent<KeyboardEvent>) {
+        let stopEvent = false;
+        if (mapBrowserEvent.type === "keydown") {
+            const keyEvent = mapBrowserEvent.originalEvent;
+            const code = keyEvent.code.toLowerCase();
+            if (code in this.actions) {
+                this.actions[code]()
+                keyEvent.preventDefault();
+            }
+        }
+        return !stopEvent;
     }
 }

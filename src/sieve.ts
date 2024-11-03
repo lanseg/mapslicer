@@ -1,5 +1,4 @@
 import { Geometry, Polygon } from 'ol/geom';
-import { Projection, toLonLat, fromLonLat } from 'ol/proj.js';
 import { Feature, Map as OLMap } from 'ol';
 import { Vector as VectorSource } from 'ol/source';
 import { Layer, Vector as VectorLayer } from 'ol/layer';
@@ -63,19 +62,19 @@ export class PolygonEditor extends VectorSource {
   }
 }
 
-export function getRectangleGrid(extent: Extent, side: number, proj: Projection, properties: { [name: string]: any } = {}) {
+export function getRectangleGrid(extent: Extent, side: number, properties: { [name: string]: any } = {}) {
   const result = [];
-  const topLeftXY = fromLonLat([extent[0], extent[1]]);
-  const bottomRightXY = fromLonLat([extent[2], extent[3]]);
+  const topLeftXY = [extent[0], extent[1]];
+  const bottomRightXY = [extent[2], extent[3]];
   for (let x = topLeftXY[0]; x < bottomRightXY[0]; x += side) {
     for (let y = topLeftXY[1]; y < bottomRightXY[1]; y += side) {
       const f = new Feature({
         geometry: new Polygon([[
-          toLonLat([x, y], proj),
-          toLonLat([x + side, y], proj),
-          toLonLat([x + side, y + side], proj),
-          toLonLat([x, y + side], proj),
-          toLonLat([x, y], proj),
+          [x, y],
+          [x + side, y],
+          [x + side, y + side],
+          [x, y + side],
+          [x, y],
         ]])
       });
       f.setId(uuid4());

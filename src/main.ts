@@ -1,7 +1,6 @@
 import './style.css';
 import { Feature, Map as OLMap, View } from 'ol';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
-import { useGeographic } from 'ol/proj.js';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
 import { RotateNorthControl, Button, ToggleButton, KeyboardEventInteraction } from './controls';
 import TileLayer from 'ol/layer/Tile';
@@ -12,8 +11,6 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { DragBoxSelection } from './selection';
-
-useGeographic();
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const select = new Select({});
@@ -44,9 +41,7 @@ const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   areaMarkupMode.source.getFeatures().forEach((f: Feature<Geometry>) => {
     const ext = f.getGeometry()?.getExtent()!;
     const gridSize = parseInt((document.getElementById("gridsize") as HTMLInputElement).value ?? "100");
-    const grid = getRectangleGrid(ext, gridSize, map.getView().getProjection(), {
-      name: `Area ${area++}`
-    });
+    const grid = getRectangleGrid(ext, gridSize, { name: `Area ${area++}` });
     cutResult.addFeatures(grid.filter((rect) => f.getGeometry()?.intersectsExtent(rect.getGeometry()?.getExtent()!)));
   });
 })

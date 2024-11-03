@@ -11,6 +11,7 @@ import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
+import { DragBoxSelection } from './selection';
 
 useGeographic();
 
@@ -107,3 +108,5 @@ const map = new OLMap({
     new DragRotateAndZoom(),
   ]),
 });
+
+map.addInteraction(DragBoxSelection(map, cutResult, select.getFeatures()));

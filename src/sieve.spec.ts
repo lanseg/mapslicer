@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest'
 import { getRectangleGrid, Mode, uuid4, VectorMarkupMode } from './sieve';
 import VectorSource from 'ol/source/Vector';
-import { get as getProjection } from 'ol/proj';
+import { fromLonLat, get as getProjection } from 'ol/proj';
 
 describe('ModeTest', () => {
   test('can create', () => {
@@ -24,8 +24,10 @@ describe('uuid4test', () => {
 
 describe('GridGeneratorTest', () => {
   const extentSwissLonLat = [
-    5.9035555686685655, 47.445892444177304, 10.535236361771894, 47.687255440268785
+    ...fromLonLat([5.9035555686685655, 47.445892444177304]),
+    ...fromLonLat([10.535236361771894, 47.687255440268785])
   ];
+
   test('can generate', () => {
     const grid = getRectangleGrid(extentSwissLonLat, 10000 /* 10km */, getProjection('EPSG:4326')!);
     expect(grid.length).toBe(208);

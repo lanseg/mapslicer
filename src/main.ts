@@ -11,6 +11,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { DragBoxSelection } from './selection';
+import { fromLonLat } from 'ol/proj';
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const select = new Select({});
@@ -77,7 +78,7 @@ const map = new OLMap({
     new VectorLayer({ source: cutResult })
   ],
   view: new View({
-    center: [8.5376768, 47.3781458],
+    center: fromLonLat([8.5376768, 47.3781458]),
     zoom: 17,
   }),
   controls: defaultControls().extend([

@@ -81,6 +81,11 @@ footer {
 .rotate-north {
   left: .5em;
   top: 4em;
+  background: none;
+}
+
+.rotate-north  button {
+  border-radius: 50%;
 }
 
 .polygon-editor {

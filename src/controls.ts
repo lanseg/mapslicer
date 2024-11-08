@@ -59,7 +59,7 @@ export class ToggleButton extends Control {
 export class RotateNorthControl extends Button {
 
     constructor(options: { [key: string]: any } = {}) {
-        super('N', 'rotate-north', () => {
+        super('Ṅ', 'rotate-north', () => {
             const map = this.getMap();
             if (map != null) {
                 map.getView().setRotation(0);

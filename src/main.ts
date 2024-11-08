@@ -78,7 +78,17 @@ const uploadGridButton = new Button('📂', 'upload-grid', () => {
   }
 });
 
+const view = new View({
+  center: fromLonLat([8.5376768, 47.3781458]),
+  zoom: 17,
+});
+
+view.on('change:rotation', (e) => {
+  (document.querySelector('.rotate-north')! as HTMLElement).style.rotate =   view.getRotation() + "rad";
+});
+
 const map = new OLMap({
+  view,
   target: 'map',
   layers: [
     new TileLayer({
@@ -87,10 +97,6 @@ const map = new OLMap({
     ...areaMarkupMode.layers,
     new VectorLayer({ source: cutResult })
   ],
-  view: new View({
-    center: fromLonLat([8.5376768, 47.3781458]),
-    zoom: 17,
-  }),
   controls: defaultControls().extend([
     togglePolygonEditor,
     convexCoverPolygons,

@@ -1,15 +1,62 @@
 @import "../node_modules/ol/ol.css";
 
-html, body {
+/* Colors */
+@property --primary-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #3700b3;
+}
+
+@property --secondary-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #c0ffee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   margin: 0;
   height: 100%;
   font-family: sans-serif;
 }
 
+body {
+  display:grid;
+  grid-template-rows: 32px auto 32px;
+  grid-template-columns: 300px auto;
+}
+
+header {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+nav {
+}
+
+footer {
+  width: 100%;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.caption {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.map {
+    width: 100%;
+}
+
 #map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
   width: 100%;
 }
 
@@ -25,8 +72,8 @@ html, body {
 }
 
 .rotate-north {
-    left: .5em;
-    top: 4em;
+  left: .5em;
+  top: 4em;
 }
 
 .polygon-editor {
@@ -59,14 +106,7 @@ html, body {
 }
 
 .toolbox {
-  left: 4em;
-  top:.5em;
-  border-radius: 4px;
-  border: solid 1px lightgray;
-  width: 120px;
-  background-color: white;
-  position: absolute;
-  font-size: 12px;
+
 }
 
 .toolbox .row {
@@ -77,7 +117,7 @@ html, body {
   padding-right: 4px;
   width: 100%;
   display: grid;
-  grid-template-columns: 50px auto;
+  grid-template-columns: auto auto;
   align-items: baseline;
 }
 
@@ -86,6 +126,6 @@ html, body {
 }
 
 .toolbox .row input {
-  width:100%;
+  width: 100%;
   height: 100%;
 }

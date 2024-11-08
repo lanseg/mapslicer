@@ -1,16 +1,29 @@
 <html>
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
 <body>
-    <div id="map" class="map" tabindex="0"></div>
-    <input type="file" id="fileDialog">
-    <div class="toolbox">
-        <div class="row">
-            <div class="name">Size, m</div>
-            <div class="value">
-                <input type="text" id="gridsize" value="50">
+    <header>Header</header>
+    <nav>
+        <div class="caption">Parameters</div>
+        <div class="toolbox">
+            <div class="row">
+                <div class="name">Size, m</div>
+                <div class="value">
+                    <input type="text" id="gridsize" value="50">
+                </div>
             </div>
         </div>
-    </div>
+        <div class="caption">Structure</div>
+    </nav>
+    <article>
+        <div id="map" class="map" tabindex="0"></div>
+    </article>
+    <footer>Footer</footer>
+    <input type="file" id="fileDialog">
     <script type="module" src="main.ts"></script>
 </body>
 

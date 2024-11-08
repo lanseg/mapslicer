@@ -14,8 +14,18 @@ import { DragBoxSelection } from './selection';
 import { fromLonLat } from 'ol/proj';
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
-const select = new Select({});
 const cutResult = new VectorSource({});
+
+const select = new Select({});
+select.on('select', (e) => {
+  const info = document.querySelector(".featurebox pre")!;
+  if (!e.selected) {
+    info.innerHTML = '';
+    return
+  }
+  const asGeojson = new GeoJSON().writeFeaturesObject(e.selected);
+  info.innerHTML = JSON.stringify(asGeojson, null, 2);
+});
 
 const fileDialog = document.getElementById('fileDialog') as HTMLInputElement;
 fileDialog.addEventListener('change', () => {

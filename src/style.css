@@ -4,13 +4,13 @@
 @property --primary-color {
   syntax: "<color>";
   inherits: false;
-  initial-value: #3700b3;
+  initial-value: #6200ee;
 }
 
-@property --secondary-color {
+@property --primary-variant {
   syntax: "<color>";
   inherits: false;
-  initial-value: #c0ffee;
+  initial-value: #3700b3;
 }
 
 * {
@@ -25,17 +25,24 @@ body {
 }
 
 body {
-  display:grid;
-  grid-template-rows: 32px auto 32px;
+  display: grid;
+  grid-template-rows: 40px auto 32px;
   grid-template-columns: 300px auto;
 }
 
 header {
   grid-column-start: 1;
   grid-column-end: 3;
+  background-color: var(--primary-variant);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  font-size: 18px;
 }
 
 nav {
+  overflow-y: scroll;
 }
 
 footer {
@@ -53,7 +60,7 @@ footer {
 }
 
 .map {
-    width: 100%;
+  width: 100%;
 }
 
 #map {
@@ -106,7 +113,8 @@ footer {
 }
 
 .toolbox {
-
+  margin-bottom: 8px;
+  margin-top: 8px;
 }
 
 .toolbox .row {

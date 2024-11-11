@@ -6,25 +6,38 @@
 </head>
 
 <body>
-    <header>Mapslicer</header>
-    <nav>
-        <div class="caption">Settings</div>
-        <div class="toolbox">
-            <div class="row">
-                <div class="name">Grid size, m</div>
-                <div class="value">
-                    <input type="text" id="gridsize" value="50">
+    <!-- Independent controls -->
+    <input type="file" id="fileDialog">
+    <input type="checkbox" id="sidebar-toggler" />
+
+    <!-- App -->
+    <div class="content">
+        <header>Mapslicer</header>
+        <nav class="sidebar">
+            <div class="caption">Settings</div>
+            <div class="toolbox">
+                <div class="row">
+                    <div class="name">Grid size, m</div>
+                    <div class="value">
+                        <input type="text" id="gridsize" value="50">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="caption">Selected as GeoJSON</div>
-        <div class="featurebox"><pre>Featurebox</pre></div>
-    </nav>
-    <article>
-        <div id="map" class="map" tabindex="0"></div>
-    </article>
-    <footer>Footer</footer>
-    <input type="file" id="fileDialog">
+            <div class="caption">Selected as GeoJSON</div>
+            <div class="featurebox">
+                <pre>GeoJSON</pre>
+            </div>
+        </nav>
+        <article>
+            <div class="controls">
+                <label for="sidebar-toggler">
+                    <div class="toggler">?</div>
+                </label>
+            </div>
+            <div id="map" class="map" tabindex="0"></div>
+        </article>
+        <footer>Footer</footer>
+    </div>
     <script type="module" src="main.ts"></script>
 </body>
 

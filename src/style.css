@@ -24,10 +24,12 @@ body {
   font-family: sans-serif;
 }
 
-body {
+.content {
+  width: 100%;
+  height: 100%;
   display: grid;
   grid-template-rows: 40px auto 32px;
-  grid-template-columns: 300px auto;
+  grid-template-columns: min-content auto;
 }
 
 header {
@@ -141,4 +143,52 @@ footer {
 .toolbox .row input {
   width: 100%;
   height: 100%;
+}
+
+article {
+  position: relative;
+}
+
+article .controls {
+  height: 100%;
+  width: auto;
+  position:absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+article .controls .toggler {
+  border-radius: 0 6px 6px 0;
+  border: solid 1px var(--primary-variant);
+  padding: 6px;
+  cursor: pointer;
+  border-left: 0px;
+  background-color: white;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+#sidebar-toggler {
+  display: none;
+}
+
+
+#sidebar-toggler:checked + label .toggler {
+  background-color: white;
+}
+
+.sidebar {
+  width: 300px;
+}
+
+#sidebar-toggler:checked~.content .sidebar {
+  display: none;
+}
+
+#sidebar-toggler:checked~.content {
+  grid-template-columns: 100%;
 }

@@ -4,6 +4,7 @@ import { Vector as VectorSource } from 'ol/source';
 import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
 import { Extent } from 'ol/extent';
+import { Options } from 'ol/source/Source';
 
 // uuid
 export function uuid4(): string {
@@ -53,8 +54,8 @@ export class PolygonEditor extends VectorSource {
   public readonly snap: Interaction;
   public readonly modify: Interaction;
 
-  constructor(params: { [key: string]: any }) {
-    super(params);
+  constructor(options: Options) {
+    super(options);
     this.layer = new VectorLayer({ source: this });
     this.draw = new Draw({ source: this, type: "Polygon" });
     this.snap = new Snap({ source: this });
@@ -62,7 +63,7 @@ export class PolygonEditor extends VectorSource {
   }
 }
 
-export function getRectangleGrid(extent: Extent, side: number, properties: { [name: string]: any } = {}) {
+export function getRectangleGrid(extent: Extent, side: number, properties: { [name: string]: object|string } = {}) {
   const result = [];
   const topLeftXY = [extent[0], extent[1]];
   const bottomRightXY = [extent[2], extent[3]];

@@ -8,8 +8,7 @@ export class Button extends Control {
     constructor(
         title: string,
         controlClass: string,
-        private readonly onclick: (map: OLMap | null) => void,
-        options: { [key: string]: any } = {}
+        private readonly onclick: (map: OLMap | null) => void
     ) {
         const button = document.createElement('button');
         button.innerHTML = title;
@@ -18,7 +17,7 @@ export class Button extends Control {
         element.className = `${controlClass} button-control ol-unselectable ol-control`;
         element.appendChild(button);
 
-        super({ element: element, target: options.target });
+        super({ element: element });
         button.addEventListener('click', () => this.onclick(this.getMap()), false);
     }
 }
@@ -30,8 +29,7 @@ export class ToggleButton extends Control {
         title: string,
         controlClass: string,
         private readonly onDown: (map: OLMap | null) => void,
-        private readonly onUp: (map: OLMap | null) => void,
-        options: { [key: string]: any } = {}
+        private readonly onUp: (map: OLMap | null) => void
     ) {
 
         const button = document.createElement('button');
@@ -41,7 +39,7 @@ export class ToggleButton extends Control {
         element.className = `${controlClass} button-control ol-unselectable ol-control`;
         element.appendChild(button);
 
-        super({ element: element, target: options.target });
+        super({ element: element });
         button.addEventListener('click', () => {
             if (this.isDown) {
                 this.onUp(this.getMap());
@@ -58,13 +56,13 @@ export class ToggleButton extends Control {
 
 export class RotateNorthControl extends Button {
 
-    constructor(options: { [key: string]: any } = {}) {
+    constructor() {
         super('Ṅ', 'rotate-north', () => {
             const map = this.getMap();
             if (map != null) {
                 map.getView().setRotation(0);
             }
-        }, options);
+        });
     }
 }
 
@@ -82,6 +80,7 @@ export class KeyboardEventInteraction extends Interaction {
             if (code in this.actions) {
                 this.actions[code]()
                 keyEvent.preventDefault();
+                stopEvent = true
             }
         }
         return !stopEvent;

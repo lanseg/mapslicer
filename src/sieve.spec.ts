@@ -2,7 +2,7 @@
 import { describe, expect, test } from 'vitest'
 import { getRectangleGrid, Mode, uuid4, VectorMarkupMode } from './sieve';
 import VectorSource from 'ol/source/Vector';
-import { fromLonLat, get as getProjection } from 'ol/proj';
+import { fromLonLat } from 'ol/proj';
 
 describe('ModeTest', () => {
   test('can create', () => {
@@ -29,7 +29,7 @@ describe('GridGeneratorTest', () => {
   ];
 
   test('can generate', () => {
-    const grid = getRectangleGrid(extentSwissLonLat, 10000 /* 10km */, getProjection('EPSG:4326')!);
+    const grid = getRectangleGrid(extentSwissLonLat, 10000 /* 10km */);
     expect(grid.length).toBe(208);
   });
 })

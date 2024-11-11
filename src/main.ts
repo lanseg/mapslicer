@@ -43,17 +43,16 @@ const togglePolygonEditor = new ToggleButton(
   '⭔',
   'polygon-editor',
   (map: OLMap | null) => { areaMarkupMode.enableMode(map!); },
-  (map: OLMap | null) => { areaMarkupMode.disableMode(map!); },
-  {});
+  (map: OLMap | null) => { areaMarkupMode.disableMode(map!); });
 
 const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   cutResult.clear();
   let area = 0;
   areaMarkupMode.source.getFeatures().forEach((f: Feature<Geometry>) => {
-    const ext = f.getGeometry()?.getExtent()!;
+    const ext = f.getGeometry()!.getExtent()!;
     const gridSize = parseInt((document.getElementById("gridsize") as HTMLInputElement).value ?? "100");
     const grid = getRectangleGrid(ext, gridSize, { name: `Area ${area++}` });
-    cutResult.addFeatures(grid.filter((rect) => f.getGeometry()?.intersectsExtent(rect.getGeometry()?.getExtent()!)));
+    cutResult.addFeatures(grid.filter((rect) => f.getGeometry()?.intersectsExtent(rect.getGeometry()!.getExtent()!)));
   });
 })
 
@@ -83,8 +82,8 @@ const view = new View({
   zoom: 17,
 });
 
-view.on('change:rotation', (e) => {
-  (document.querySelector('.rotate-north')! as HTMLElement).style.rotate =   view.getRotation() + "rad";
+view.on('change:rotation', () => {
+  (document.querySelector('.rotate-north')! as HTMLElement).style.rotate = view.getRotation() + "rad";
 });
 
 const map = new OLMap({

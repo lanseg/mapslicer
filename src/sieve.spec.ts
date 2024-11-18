@@ -3,6 +3,7 @@ import { describe, expect, test } from 'vitest'
 import { getRectangleGrid, Mode, uuid4, VectorMarkupMode } from './sieve';
 import VectorSource from 'ol/source/Vector';
 import { fromLonLat } from 'ol/proj';
+import { fromExtent } from 'ol/geom/Polygon';
 
 describe('ModeTest', () => {
   test('can create', () => {
@@ -29,7 +30,19 @@ describe('GridGeneratorTest', () => {
   ];
 
   test('can generate', () => {
-    const grid = getRectangleGrid(extentSwissLonLat, 10000 /* 10km */);
+    const grid = getRectangleGrid(fromExtent(extentSwissLonLat), 10000 /* 10km */);
     expect(grid.length).toBe(208);
+  });
+
+  test('can generate rotated', () => {
+    const grid = getRectangleGrid(fromExtent(extentSwissLonLat), 10000  /* 10km */, Math.PI / 6);
+    expect(grid.length).toBe(281);
+  });
+
+  test('can generate pi/2', () => {
+    for (let i = 0; i <= 4; i++) {
+      const grid = getRectangleGrid(fromExtent(extentSwissLonLat), 10000 /* 10km */, i * Math.PI / 2);
+      expect(grid.length).toBe(208);
+    }
   });
 })

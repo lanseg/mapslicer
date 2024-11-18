@@ -1,9 +1,9 @@
-import { Geometry, Polygon } from 'ol/geom';
+import { Geometry } from 'ol/geom';
+import { fromExtent } from 'ol/geom/Polygon';
 import { Feature, Map as OLMap } from 'ol';
 import { Vector as VectorSource } from 'ol/source';
 import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
-import { Extent } from 'ol/extent';
 import { Options } from 'ol/source/Source';
 
 // uuid
@@ -63,24 +63,30 @@ export class PolygonEditor extends VectorSource {
   }
 }
 
-export function getRectangleGrid(extent: Extent, side: number, properties: { [name: string]: object|string } = {}) {
+export function getRectangleGrid(
+  geom: Geometry,
+  side: number,
+  rotation: number = 0,
+  properties: { [name: string]: object | string } = {}) {
+  const originalExtent = geom.getExtent();
   const result = [];
-  const topLeftXY = [extent[0], extent[1]];
-  const bottomRightXY = [extent[2], extent[3]];
-  for (let x = topLeftXY[0]; x < bottomRightXY[0]; x += side) {
-    for (let y = topLeftXY[1]; y < bottomRightXY[1]; y += side) {
-      const f = new Feature({
-        geometry: new Polygon([[
-          [x, y],
-          [x + side, y],
-          [x + side, y + side],
-          [x, y + side],
-          [x, y],
-        ]])
-      });
-      f.setId(uuid4());
-      f.setProperties(properties);
-      result.push(f);
+  const c = [(originalExtent[0] + originalExtent[2]) / 2, (originalExtent[1] + originalExtent[3]) / 2];
+  const e2 = fromExtent(originalExtent);
+  e2.rotate(rotation, c);
+
+  const extent = e2.getExtent();
+  const propertyJson = JSON.stringify(properties);
+  for (let x = extent[0]; x < extent[2]; x += side) {
+    for (let y = extent[1]; y < extent[3]; y += side) {
+      const poly = fromExtent([x, y, x + side, y + side]);
+      poly.rotate(rotation, c);
+      if (!geom.intersectsExtent(poly.getExtent())) {
+        continue;
+      }
+      const options = JSON.parse(propertyJson);
+      options.geometry = poly;
+      options.id = uuid4();
+      result.push(new Feature(options));
     }
   }
   return result;

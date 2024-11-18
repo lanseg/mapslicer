@@ -49,10 +49,9 @@ const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   cutResult.clear();
   let area = 0;
   areaMarkupMode.source.getFeatures().forEach((f: Feature<Geometry>) => {
-    const ext = f.getGeometry()!.getExtent()!;
     const gridSize = parseInt((document.getElementById("gridsize") as HTMLInputElement).value ?? "100");
-    const grid = getRectangleGrid(ext, gridSize, { name: `Area ${area++}` });
-    cutResult.addFeatures(grid.filter((rect) => f.getGeometry()?.intersectsExtent(rect.getGeometry()!.getExtent()!)));
+    const grid = getRectangleGrid(f.getGeometry()!, gridSize, map.getView().getRotation(), { name: `Area ${area++}` });
+    cutResult.addFeatures(grid);
   });
 })
 

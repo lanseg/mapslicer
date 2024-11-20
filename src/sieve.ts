@@ -67,7 +67,8 @@ export function getRectangleGrid(
   geom: Geometry,
   side: number,
   rotation: number = 0,
-  properties: { [name: string]: object | string } = {}) {
+  properties: { [name: string]: object | string } = {}
+) {
   const originalExtent = geom.getExtent();
   const result = [];
   const c = [(originalExtent[0] + originalExtent[2]) / 2, (originalExtent[1] + originalExtent[3]) / 2];

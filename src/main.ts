@@ -1,5 +1,5 @@
 import './style.css';
-import {getArea, getLength} from 'ol/sphere.js';
+import { getArea, getLength } from 'ol/sphere.js';
 import { Feature, Map as OLMap, View } from 'ol';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
@@ -17,30 +17,29 @@ import { fromLonLat } from 'ol/proj';
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const cutResult = new VectorSource({});
 
-function formatArea (area: number) {
-  let output;
-  if (area > 10000) {
-    output = `${Math.round((area / 1000000) * 100) / 100}km<sup>2</sup>`;
-  } else {
-    output = `${Math.round(area * 100) / 100}m<sup>2</sup>`;
-  }
-  return output;
-};
+function formatArea(area: number) {
+  return area > 100000 ?
+    `${Math.round((area / 1000000) * 100) / 100}km<sup>2</sup>` :
+    `${Math.round(area * 100) / 100}m<sup>2</sup>`;;
+}
+
+function formatStatus(features: Feature<Geometry>[]): string {
+  return formatArea(
+    features.map(f => getArea(f.getGeometry()!)).reduce((s, a) => s + a, 0)
+  );
+}
+
+function handleSelection() {
+  const features = select.getFeatures().getArray();
+  document.querySelector("#area")!.innerHTML = formatStatus(features);
+  document.querySelector(".featurebox pre")!.innerHTML = features.length == 0 ?
+    "" :
+    JSON.stringify(new GeoJSON().writeFeaturesObject(features), null, 2);
+}
 
 const select = new Select({});
-select.on('select', () => {
-  const info = document.querySelector(".featurebox pre")!;
-  const features = select.getFeatures().getArray();
-  if (features.length == 0) {
-    info.innerHTML = '';
-    return
-  }
-  const asGeojson = new GeoJSON().writeFeaturesObject(features);
-  info.innerHTML = JSON.stringify(asGeojson, null, 2);
-
-  const area = features.map(f => getArea(f.getGeometry()!)).reduce((s, a) => s + a, 0);
-  document.querySelector("#area")!.innerHTML = formatArea(area);
-});
+select.on('select', () => handleSelection());
+select.getFeatures().on('change', () => handleSelection());
 
 const fileDialog = document.getElementById('fileDialog') as HTMLInputElement;
 fileDialog.addEventListener('change', () => {
@@ -134,4 +133,4 @@ const map = new OLMap({
   ]),
 });
 
-map.addInteraction(DragBoxSelection(map, cutResult, select.getFeatures()));
+map.addInteraction(DragBoxSelection(map, select, cutResult));

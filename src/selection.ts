@@ -1,26 +1,29 @@
 import { Collection, Map as OLMap } from 'ol';
 import VectorSource from 'ol/source/Vector.js';
-import { DragBox } from 'ol/interaction.js';
+import { DragBox, Select } from 'ol/interaction.js';
 import { getWidth } from 'ol/extent.js';
 import { platformModifierKeyOnly } from 'ol/events/condition.js';
 import { Geometry } from 'ol/geom';
 import { Feature } from 'ol';
 
-export function DragBoxSelection(map: OLMap, features: VectorSource<Feature<Geometry>>, selectedFeatures: Collection<Feature<Geometry>>): DragBox {
+export function DragBoxSelection(map: OLMap, select: Select, features: VectorSource<Feature<Geometry>>): DragBox {
     const dragBox = new DragBox({
         condition: platformModifierKeyOnly,
     });
-    configureSelection(map, dragBox, features, selectedFeatures);
+    configureSelection(map, dragBox, select, features);
     return dragBox;
 }
 
-function configureSelection(map: OLMap, dragBox: DragBox, features: VectorSource<Feature<Geometry>>, selectedFeatures: Collection<Feature<Geometry>>) {
+function configureSelection(map: OLMap, dragBox: DragBox, select:Select, features: VectorSource<Feature<Geometry>>) {
     dragBox.on('boxend', function () {
+        const selectedFeatures = select.getFeatures();
         const boxExtent = dragBox.getGeometry().getExtent();
         const worldExtent = map.getView().getProjection().getExtent();
         const worldWidth = getWidth(worldExtent);
         const startWorld = Math.floor((boxExtent[0] - worldExtent[0]) / worldWidth);
         const endWorld = Math.floor((boxExtent[2] - worldExtent[0]) / worldWidth);
+
+        const featuresToAdd: Feature<Geometry>[] = [];
 
         for (let world = startWorld; world <= endWorld; ++world) {
             const left = Math.max(boxExtent[0] - world * worldWidth, worldExtent[0]);
@@ -46,12 +49,14 @@ function configureSelection(map: OLMap, dragBox: DragBox, features: VectorSource
                 const geometry = feature.getGeometry()!.clone();
                 geometry.rotate(-rotation, anchor);
                 if (geometry.intersectsExtent(extent)) {
-                  selectedFeatures.push(feature);
+                  featuresToAdd.push(feature);
                 }
               });
             } else {
-              selectedFeatures.extend(boxFeatures);
+              featuresToAdd.push(...boxFeatures);
             }
         }
+        selectedFeatures.extend(featuresToAdd);
+        selectedFeatures.changed();
     });
 }

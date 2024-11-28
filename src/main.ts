@@ -29,9 +29,24 @@ function formatStatus(features: Feature<Geometry>[]): string {
   );
 }
 
+function updateAreas() {
+  const areabox = document.querySelector(".areabox")!;
+  const content = document.createDocumentFragment();
+  for (const feature of areaMarkupMode.source.getFeatures()) {
+    const areaBox = document.createElement("div");
+    const props = feature.getProperties()
+    areaBox.innerHTML = `${props["name"]}`;
+    areaBox.setAttribute("id", `feature_${feature.getId()}`);
+    content.appendChild(areaBox);
+  }
+  areabox.replaceChildren(content);
+}
+
 function handleSelection() {
   const features = select.getFeatures().getArray();
   document.querySelector("#area")!.innerHTML = formatStatus(features);
+  updateAreas();
+
   document.querySelector(".featurebox pre")!.innerHTML = features.length == 0 ?
     "" :
     JSON.stringify(new GeoJSON().writeFeaturesObject(features), null, 2);

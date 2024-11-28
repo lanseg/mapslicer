@@ -4,7 +4,6 @@ import { Feature, Map as OLMap } from 'ol';
 import { Vector as VectorSource } from 'ol/source';
 import { Layer, Vector as VectorLayer } from 'ol/layer';
 import { Draw, Interaction, Modify, Snap } from 'ol/interaction';
-import { Options } from 'ol/source/Source';
 
 // uuid
 export function uuid4(): string {
@@ -25,13 +24,23 @@ export class Mode {
   }
 }
 
+function newDraw(source: VectorSource<Feature<Geometry>>):Interaction {
+  const draw = new Draw({ source: source, type: "Polygon" });
+  draw.on('drawend', (e) => {
+    e.feature!.setId(uuid4());
+    e.feature!.set("name", `Area #${source.getFeatures().length}`);
+    console.log(e);
+  })
+  return draw;
+}
+
 export class VectorMarkupMode extends Mode {
 
   constructor(public readonly source: VectorSource<Feature<Geometry>>) {
     super(
       [new VectorLayer({ source })],
       [
-        new Draw({ source: source, type: "Polygon" }),
+        newDraw(source),
         new Snap({ source: source }),
         new Modify({ source: source }),
       ]
@@ -44,22 +53,6 @@ export class VectorMarkupMode extends Mode {
 
   disableMode(map: OLMap): void {
     this.interactions.forEach((i) => map.removeInteraction(i))
-  }
-}
-
-export class PolygonEditor extends VectorSource {
-
-  public readonly layer: VectorLayer;
-  public readonly draw: Interaction;
-  public readonly snap: Interaction;
-  public readonly modify: Interaction;
-
-  constructor(options: Options) {
-    super(options);
-    this.layer = new VectorLayer({ source: this });
-    this.draw = new Draw({ source: this, type: "Polygon" });
-    this.snap = new Snap({ source: this });
-    this.modify = new Modify({ source: this });
   }
 }
 

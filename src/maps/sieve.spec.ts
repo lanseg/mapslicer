@@ -1,27 +1,9 @@
-// sum.test.js
 import { describe, expect, test } from 'vitest'
-import { getRectangleGrid, Mode, uuid4, VectorMarkupMode } from './sieve';
-import VectorSource from 'ol/source/Vector';
-import { fromLonLat } from 'ol/proj';
+
 import { fromExtent } from 'ol/geom/Polygon';
+import { fromLonLat } from 'ol/proj';
 
-describe('ModeTest', () => {
-  test('can create', () => {
-    expect(new Mode()).toBeTruthy();
-  });
-})
-
-describe('VectorMarkupModeTest', () => {
-  test('can create', () => {
-    expect(new VectorMarkupMode(new VectorSource())).toBeTruthy();
-  });
-})
-
-describe('uuid4test', () => {
-  test('can create', () => {
-    expect(uuid4()).toBeTruthy();
-  });
-})
+import { getRectangleGrid } from './grid';
 
 describe('GridGeneratorTest', () => {
   const extentSwissLonLat = [

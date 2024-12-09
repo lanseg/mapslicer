@@ -1,18 +1,18 @@
-import './style.css';
-import { getArea, getLength } from 'ol/sphere.js';
-import { Feature, Map as OLMap, View } from 'ol';
-import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
-import { RotateNorthControl, Button, ToggleButton, KeyboardEventInteraction } from './controls';
-import TileLayer from 'ol/layer/Tile';
-import { OSM } from 'ol/source';
-import { VectorMarkupMode, getRectangleGrid } from './sieve';
+import { Feature, Map as OLMap, View } from 'ol';
+import { KeyboardEventInteraction, VectorMarkupMode } from './maps/interactions';
+import { MapButton, RotateNorthControl, ToggleButton } from './maps/controls';
+import { ScaleLine, defaults as defaultControls } from 'ol/control';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import { Vector as VectorSource } from 'ol/source';
+
+import { DragBoxSelection } from './maps/selection';
+import { GeoJSON } from 'ol/format';
 import { Geometry } from 'ol/geom';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
-import GeoJSON from 'ol/format/GeoJSON';
-import { DragBoxSelection } from './selection';
+import { OSM } from 'ol/source';
 import { fromLonLat } from 'ol/proj';
+import { getArea } from 'ol/sphere.js';
+import { getRectangleGrid } from './maps/grid';
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const cutResult = new VectorSource({});
@@ -74,7 +74,7 @@ const togglePolygonEditor = new ToggleButton(
   (map: OLMap | null) => { areaMarkupMode.enableMode(map!); },
   (map: OLMap | null) => { areaMarkupMode.disableMode(map!); });
 
-const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
+const convexCoverPolygons = new MapButton('▦', 'cut-grid', () => {
   cutResult.clear();
   let area = 0;
   areaMarkupMode.source.getFeatures().forEach((f: Feature<Geometry>) => {
@@ -84,7 +84,7 @@ const convexCoverPolygons = new Button('▦', 'cut-grid', () => {
   });
 })
 
-const downloadGridButton = new Button('💾', 'download-grid', () => {
+const downloadGridButton = new MapButton('💾', 'download-grid', () => {
   const json = new GeoJSON().writeFeatures(cutResult.getFeatures());
   const file = new File([json], 'geojson-grid.json', { type: 'application/json' })
   const link = document.createElement('a');
@@ -99,7 +99,7 @@ const downloadGridButton = new Button('💾', 'download-grid', () => {
   window.URL.revokeObjectURL(url);
 });
 
-const uploadGridButton = new Button('📂', 'upload-grid', () => {
+const uploadGridButton = new MapButton('📂', 'upload-grid', () => {
   if (fileDialog && ("showPicker" in HTMLInputElement.prototype)) {
     fileDialog.showPicker();
   }

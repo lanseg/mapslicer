@@ -2,7 +2,7 @@
   "name": "mapslicer",
   "version": "0.0.1",
   "description": "Dividing map into individual work areas",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "start": "vite",
     "build": "eslint -c eslint.config.mjs && tsc && vite build",
@@ -16,13 +16,13 @@
     "ol": "latest"
   },
   "devDependencies": {
-    "@eslint/js": "^9.14.0",
+    "@eslint/js": "^9.16.0",
     "cypress": "^13.15.1",
-    "eslint": "^9.14.0",
+    "eslint": "^9.16.0",
     "globals": "^15.12.0",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.6.3",
-    "typescript-eslint": "^8.13.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.17.0",
     "vite": "^5.4.2",
     "vitest": "^2.1.3"
   }

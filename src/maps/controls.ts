@@ -1,9 +1,8 @@
-import { MapBrowserEvent, Map as OLMap } from 'ol';
 import { Control } from 'ol/control.js';
-import { Interaction } from 'ol/interaction';
+import { Map as OLMap } from 'ol';
 
 
-export class Button extends Control {
+export class MapButton extends Control {
 
     constructor(
         title: string,
@@ -54,7 +53,7 @@ export class ToggleButton extends Control {
 }
 
 
-export class RotateNorthControl extends Button {
+export class RotateNorthControl extends MapButton {
 
     constructor() {
         super('Ṅ', 'rotate-north', () => {
@@ -63,26 +62,5 @@ export class RotateNorthControl extends Button {
                 map.getView().setRotation(0);
             }
         });
-    }
-}
-
-export class KeyboardEventInteraction extends Interaction {
-
-    constructor(private readonly actions: { [key: string]: () => void}) {
-        super();
-    }
-
-    handleEvent(mapBrowserEvent: MapBrowserEvent<KeyboardEvent>) {
-        let stopEvent = false;
-        if (mapBrowserEvent.type === "keydown") {
-            const keyEvent = mapBrowserEvent.originalEvent;
-            const code = keyEvent.code.toLowerCase();
-            if (code in this.actions) {
-                this.actions[code]()
-                keyEvent.preventDefault();
-                stopEvent = true
-            }
-        }
-        return !stopEvent;
     }
 }

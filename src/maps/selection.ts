@@ -1,10 +1,9 @@
-import { Collection, Map as OLMap } from 'ol';
-import VectorSource from 'ol/source/Vector.js';
 import { DragBox, Select } from 'ol/interaction.js';
+import { Feature, Map as OLMap } from 'ol';
+import { Geometry } from 'ol/geom';
+import { Vector as VectorSource } from 'ol/source';
 import { getWidth } from 'ol/extent.js';
 import { platformModifierKeyOnly } from 'ol/events/condition.js';
-import { Geometry } from 'ol/geom';
-import { Feature } from 'ol';
 
 export function DragBoxSelection(map: OLMap, select: Select, features: VectorSource<Feature<Geometry>>): DragBox {
     const dragBox = new DragBox({

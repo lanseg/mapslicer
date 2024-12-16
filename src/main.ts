@@ -1,5 +1,5 @@
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
-import { Feature, Map as OLMap, View } from 'ol';
+import { Collection, Feature, Map as OLMap, View } from 'ol';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { GeoJSON } from 'ol/format';
@@ -25,15 +25,21 @@ export function formatStatus(features: Feature<Geometry>[]): string {
   );
 }
 
-function updateAreas() {
+function updateGridElement(gridFeatures: Collection<Feature>):Node {
   const content = document.createDocumentFragment();
-  for (const feature of select.getFeatures().getArray()) {
+  for (const feature of gridFeatures.getArray()) {
     const feBox = document.createElement("div");
     const fe = new FeatureEditor(feature, feBox);
     fe.render();
     content.appendChild(feBox);
   }
-  document.querySelector(".editbox")!.replaceChildren(content);
+  return content;
+}
+
+function updateAreas() {
+  document.querySelector(".editbox")!.replaceChildren(
+    updateGridElement(select.getFeatures())
+  );
 }
 
 function handleSelection() {

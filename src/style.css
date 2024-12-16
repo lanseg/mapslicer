@@ -13,6 +13,18 @@
   initial-value: #3700b3;
 }
 
+@property --secondary-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #03dac6;
+}
+
+@property --secondary-variant {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #018786;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -202,6 +214,14 @@ article .controls .toggler {
   column-gap: 4px;
   display: grid;
   grid-template-columns: auto auto;
+}
+
+.properties .header {
+  grid-column: span 2;
+  text-align: center;
+  padding: 4px;
+  background-color: var(--secondary-variant);
+  color: white;
 }
 
 .properties .key {

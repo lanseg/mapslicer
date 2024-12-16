@@ -11,6 +11,7 @@ export class FeatureEditor {
     render() {
         const content = document.createElement('div');
         content.setAttribute('class', 'properties');
+        content.innerHTML += '<div class="header">Feature</div>';
         const props = this.feature.getProperties();
         for (const [k, v] of Object.entries(props)) {
             if (k in excludeFields) {

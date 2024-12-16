@@ -1,17 +1,18 @@
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
 import { Feature, Map as OLMap, View } from 'ol';
-import { KeyboardEventInteraction, VectorMarkupMode } from './maps/interactions';
-import { MapButton, RotateNorthControl, ToggleButton } from './maps/controls';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
-
-import { DragBoxSelection } from './maps/selection';
 import { GeoJSON } from 'ol/format';
 import { Geometry } from 'ol/geom';
 import { OSM } from 'ol/source';
+import { Vector as VectorSource } from 'ol/source';
 import { fromLonLat } from 'ol/proj';
 import { getArea } from 'ol/sphere.js';
+
+import { KeyboardEventInteraction, VectorMarkupMode } from './maps/interactions';
+import { MapButton, RotateNorthControl, ToggleButton } from './maps/controls';
+import { DragBoxSelection } from './maps/selection';
+import { FeatureEditor } from './ui/feature_editor';
 import { getRectangleGrid } from './maps/grid';
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
@@ -30,16 +31,15 @@ function formatStatus(features: Feature<Geometry>[]): string {
 }
 
 function updateAreas() {
-  const areabox = document.querySelector(".areabox")!;
+  //
   const content = document.createDocumentFragment();
-  for (const feature of areaMarkupMode.source.getFeatures()) {
-    const areaBox = document.createElement("div");
-    const props = feature.getProperties()
-    areaBox.innerHTML = `${props["name"]}`;
-    areaBox.setAttribute("id", `feature_${feature.getId()}`);
-    content.appendChild(areaBox);
+  for (const feature of select.getFeatures().getArray()) {
+    const feBox = document.createElement("div");
+    const fe = new FeatureEditor(feature, feBox);
+    fe.render();
+    content.appendChild(feBox);
   }
-  areabox.replaceChildren(content);
+  document.querySelector(".editbox")!.replaceChildren(content);
 }
 
 function handleSelection() {
@@ -47,7 +47,7 @@ function handleSelection() {
   document.querySelector("#area")!.innerHTML = formatStatus(features);
   updateAreas();
 
-  document.querySelector(".featurebox pre")!.innerHTML = features.length == 0 ?
+  document.querySelector(".featurebox textarea")!.innerHTML = features.length == 0 ?
     "" :
     JSON.stringify(new GeoJSON().writeFeaturesObject(features), null, 2);
 }
@@ -76,10 +76,11 @@ const togglePolygonEditor = new ToggleButton(
 
 const convexCoverPolygons = new MapButton('▦', 'cut-grid', () => {
   cutResult.clear();
-  let area = 0;
   areaMarkupMode.source.getFeatures().forEach((f: Feature<Geometry>) => {
     const gridSize = parseInt((document.getElementById("gridsize") as HTMLInputElement).value ?? "100");
-    const grid = getRectangleGrid(f.getGeometry()!, gridSize, map.getView().getRotation(), { name: `Area ${area++}` });
+    const grid = getRectangleGrid(f.getGeometry()!, gridSize, map.getView().getRotation(), {
+      "parent": `${f.getId()}`
+    });
     cutResult.addFeatures(grid);
   });
 })

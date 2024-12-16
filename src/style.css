@@ -86,7 +86,7 @@ footer {
   background: none;
 }
 
-.rotate-north  button {
+.rotate-north button {
   border-radius: 50%;
 }
 
@@ -152,7 +152,7 @@ article {
 article .controls {
   height: 100%;
   width: auto;
-  position:absolute;
+  position: absolute;
   top: 0px;
   left: 0px;
   z-index: 100;
@@ -176,13 +176,17 @@ article .controls .toggler {
   display: none;
 }
 
-
-#sidebar-toggler:checked + label .toggler {
+#sidebar-toggler:checked+label .toggler {
   background-color: white;
 }
 
 .sidebar {
   width: 300px;
+}
+
+.sidebar .featurebox textarea {
+  width: 100%;
+  height: 100%;
 }
 
 #sidebar-toggler:checked~.content .sidebar {
@@ -191,4 +195,20 @@ article .controls .toggler {
 
 #sidebar-toggler:checked~.content {
   grid-template-columns: 100%;
+}
+
+/* Feature editor */
+.properties {
+  column-gap: 4px;
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.properties .key {
+  padding-left: 2px;
+}
+
+.properties .value {
+  padding-right: 2px;
+  overflow: hidden;
 }

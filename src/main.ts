@@ -13,25 +13,19 @@ import { KeyboardEventInteraction, VectorMarkupMode } from './maps/interactions'
 import { MapButton, RotateNorthControl, ToggleButton } from './maps/controls';
 import { DragBoxSelection } from './maps/selection';
 import { FeatureEditor } from './ui/feature_editor';
+import { formatArea } from './lib/format';
 import { getRectangleGrid } from './maps/grid';
 
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const cutResult = new VectorSource({});
 
-function formatArea(area: number) {
-  return area > 100000 ?
-    `${Math.round((area / 1000000) * 100) / 100}km<sup>2</sup>` :
-    `${Math.round(area * 100) / 100}m<sup>2</sup>`;;
-}
-
-function formatStatus(features: Feature<Geometry>[]): string {
+export function formatStatus(features: Feature<Geometry>[]): string {
   return formatArea(
     features.map(f => getArea(f.getGeometry()!)).reduce((s, a) => s + a, 0)
   );
 }
 
 function updateAreas() {
-  //
   const content = document.createDocumentFragment();
   for (const feature of select.getFeatures().getArray()) {
     const feBox = document.createElement("div");

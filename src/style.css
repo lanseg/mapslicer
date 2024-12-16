@@ -61,8 +61,12 @@ nav {
 
 footer {
   width: 100%;
+  display: flex;
   grid-column-start: 1;
   grid-column-end: 3;
+  background-color: var(--primary-variant);
+  color: white;
+  align-items: center;
 }
 
 .caption {

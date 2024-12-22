@@ -215,9 +215,8 @@ article .controls .toggler {
 
 /* Feature editor */
 .properties {
-  column-gap: 4px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 50% 50%;
 }
 
 .properties .header {
@@ -226,6 +225,32 @@ article .controls .toggler {
   padding: 4px;
   background-color: var(--secondary-variant);
   color: white;
+}
+
+.properties .footer {
+  grid-column: span 2;
+  text-align: center;
+}
+
+.properties .footer .add_property {
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.properties .footer .add_property:hover {
+  background-color:var(--secondary-color);
+}
+
+.properties .cell {
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 1px;
+  width: 100%;
+  height:100%;
+}
+.properties .cell input{
+  width: 100%;
 }
 
 .properties .key {

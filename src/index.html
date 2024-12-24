@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
@@ -41,7 +41,22 @@
             <div id="map" class="map" tabindex="0"></div>
         </article>
         <footer>
-            Area: <span id="area"></span>
+            <div class="stats">
+                <div class="stat">
+                    Area: <span class="area">0</span>
+                </div>
+                <div class="stat">
+                    Count: <span class="count">0</span>
+                </div>
+            </div>
+            <div class="controls">
+                <select>
+                    <option>OSM</option>
+                    <option>Google</option>
+                    <option>Bing</option>
+                    <option>Satellite</option>
+                </select>
+            </div>
         </footer>
     </div>
     <script type="module" src="main.ts"></script>

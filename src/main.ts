@@ -1,5 +1,5 @@
-import { Collection, Feature, Map as OLMap, View } from 'ol';
 import { DragRotateAndZoom, Modify, Select, defaults as defaultInteractions } from 'ol/interaction';
+import { Feature, Map as OLMap, View } from 'ol';
 import { ScaleLine, defaults as defaultControls } from 'ol/control';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { GeoJSON } from 'ol/format';
@@ -19,15 +19,9 @@ import { getRectangleGrid } from './maps/grid';
 const areaMarkupMode = new VectorMarkupMode(new VectorSource<Feature<Geometry>>());
 const cutResult = new VectorSource({});
 
-export function formatStatus(features: Feature<Geometry>[]): string {
-  return formatArea(
-    features.map(f => getArea(f.getGeometry()!)).reduce((s, a) => s + a, 0)
-  );
-}
-
-function updateGridElement(gridFeatures: Collection<Feature>):Node {
+function updateGridElement(features: Feature<Geometry>[]): Node {
   const content = document.createDocumentFragment();
-  for (const feature of gridFeatures.getArray()) {
+  for (const feature of features) {
     const feBox = document.createElement("div");
     const fe = new FeatureEditor(feature, feBox);
     fe.render();
@@ -36,25 +30,36 @@ function updateGridElement(gridFeatures: Collection<Feature>):Node {
   return content;
 }
 
-function updateAreas() {
+function updateAreas(features: Feature<Geometry>[]) {
   document.querySelector(".editbox")!.replaceChildren(
-    updateGridElement(select.getFeatures())
+    updateGridElement(features)
   );
 }
 
-function handleSelection() {
-  const features = select.getFeatures().getArray();
-  document.querySelector("#area")!.innerHTML = formatStatus(features);
-  updateAreas();
+function updateStats(features: Feature<Geometry>[]): void {
+  document.querySelector(".stats .area")!.innerHTML = formatArea(
+    features.map(f => getArea(f.getGeometry()!)).reduce((s, a) => s + a, 0)
+  );
+  document.querySelector(".stats .count")!.innerHTML = `${features.length}`;
+}
 
-  (document.querySelector(".featurebox textarea")! as HTMLTextAreaElement).value = features.length == 0 ?
-    "" :
+function handleSelection(features: Feature<Geometry>[]) {
+  updateStats(features);
+  updateAreas(features);
+
+  const textarea = <HTMLTextAreaElement>document.querySelector(".featurebox textarea");
+  textarea.value = features.length == 0 ? "" :
     JSON.stringify(new GeoJSON().writeFeaturesObject(features), null, 2);
 }
 
+function deleteSelection() {
+  cutResult.removeFeatures(select.getFeatures().getArray());
+  handleSelection([]);
+}
+
 const select = new Select({});
-select.on('select', () => handleSelection());
-select.getFeatures().on('change', () => handleSelection());
+select.on('select', () => handleSelection(select.getFeatures().getArray()));
+select.getFeatures().on('change', () => handleSelection(select.getFeatures().getArray()));
 
 const fileDialog = document.getElementById('fileDialog') as HTMLInputElement;
 fileDialog.addEventListener('change', () => {
@@ -142,7 +147,7 @@ const map = new OLMap({
   interactions: defaultInteractions().extend([
     select,
     new KeyboardEventInteraction({
-      "delete": () => cutResult.removeFeatures(select.getFeatures().getArray())
+      "delete": () => { deleteSelection(); }
     }),
     new Modify({ features: select.getFeatures() }),
     new DragRotateAndZoom(),

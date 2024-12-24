@@ -261,3 +261,18 @@ article .controls .toggler {
   padding-right: 2px;
   overflow: hidden;
 }
+
+footer .stats {
+  height: 100%;
+  align-items: center;
+  display: flex;
+  column-gap: 16px;
+}
+
+footer .controls {
+  flex-grow: 1;
+  height: 100%;
+  align-items: center;
+  justify-content: right;
+  display: flex;
+}

@@ -13,6 +13,7 @@ import { KeyboardEventInteraction, VectorMarkupMode } from './maps/interactions'
 import { MapButton, RotateNorthControl, ToggleButton } from './maps/controls';
 import { DragBoxSelection } from './maps/selection';
 import { FeatureEditor } from './ui/feature_editor';
+import { GRID_STYLE } from './maps/styles';
 import { formatArea } from './lib/format';
 import { getRectangleGrid } from './maps/grid';
 
@@ -128,7 +129,10 @@ const map = new OLMap({
       source: new OSM()
     }),
     ...areaMarkupMode.layers,
-    new VectorLayer({ source: cutResult })
+    new VectorLayer({
+      source: cutResult,
+      style: GRID_STYLE
+    })
   ],
   controls: defaultControls().extend([
     togglePolygonEditor,
